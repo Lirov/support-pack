@@ -8,20 +8,19 @@ Capture browser troubleshooting data (page info, console errors, failed network 
 
 ## Detailed Description
 
-**Support Pack** is the essential troubleshooting companion for Technical Support, Help Desk teams, Tier 2/3 Support engineers, QA, developers, and power users.
+Support Pack is a lightweight, privacy-first Chrome Extension designed for Technical Support, Help Desk teams, Tier 2/3 Support engineers, QA, developers, and power users.
 
-When facing web application bugs or user-reported issues, gathering necessary context—such as OS version, browser build, viewport size, console errors, and failed API endpoints—often takes multiple back-and-forth emails or manual copy-pasting.
+When facing web application bugs or user-reported issues, gathering necessary context—such as OS version, browser build, viewport size, console errors, and failed API endpoints—often requires multiple back-and-forth emails or manual copy-pasting.
 
-Support Pack solves this instantly: **Click one button to generate a clean, formatted plain-text diagnostic report ready for Zendesk, Jira, ServiceNow, Slack, Teams, GitHub, or Email.**
+Support Pack solves this instantly: click one button to capture browser troubleshooting information from your current tab and generate a clean, formatted plain-text report ready to paste into any support ticketing system, issue tracker, chat tool, or email.
 
-### Key Features
-
-- **⚡ Instant 1-Click Capture**: Collect active URL, page title, timestamp, browser details, viewport size, console errors, and failed HTTP requests.
-- **🔒 100% Local & Privacy-First**: All data stays on your device. Zero external servers, zero tracking, zero analytics, zero remote API uploads.
-- **🛡️ Automatic Sensitive Data Redaction**: Automatically scrubs sensitive parameters (`token`, `api_key`, `auth`, `password`, `session`) from URLs and error logs before displaying.
-- **✏️ Editable Preview**: Review and edit your debug report inside the popup before copying.
-- **📋 Plain-Text Standard Format**: Formatted for instant readability across any ticketing platform or chat tool.
-- **🛡️ Minimal Permissions**: No broad `<all_urls>` permission required. Respects Chrome Manifest V3 security standards.
+KEY FEATURES:
+• 1-Click Debug Capture: Collect active URL, page title, capture timestamp, browser details, OS, viewport size, device pixel ratio, language, console errors, and failed HTTP requests.
+• 100% Local & Privacy-First: All diagnostic data stays on your device. Zero external servers, zero tracking, zero analytics, and zero remote API uploads.
+• Automatic Sensitive Data Redaction: Automatically scrubs sensitive query parameters (such as token, api_key, auth, password, session, jwt) from URLs and error logs before displaying.
+• Editable Report Preview: Review and edit your debug report inside the popup before copying.
+• Plain-Text Format: Formatted for instant readability across any ticketing platform, message app, or email client.
+• Minimal Permissions: Built strictly with Chrome Manifest V3 security standards using minimal permissions.
 
 ---
 
