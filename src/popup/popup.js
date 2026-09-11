@@ -31,37 +31,31 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      let response;
       try {
-        response = await chrome.tabs.sendMessage(tab.id, { action: 'CAPTURE_DEBUG_INFO' });
-      } catch (err) {
-        try {
-          await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['src/content/main-world.js'],
-            world: 'MAIN'
-          });
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ['src/content/main-world.js'],
+          world: 'MAIN'
+        });
 
-          await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: [
-              'src/utils/redact.js',
-              'src/utils/browser-info.js',
-              'src/content/content.js'
-            ]
-          });
+        await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: [
+            'src/utils/redact.js',
+            'src/utils/browser-info.js',
+            'src/content/content.js'
+          ]
+        });
 
-          response = await chrome.tabs.sendMessage(tab.id, { action: 'CAPTURE_DEBUG_INFO' });
-        } catch (injectErr) {
-          showError(`Cannot capture diagnostics from this tab: ${injectErr.message || injectErr}`);
-          return;
+        const response = await chrome.tabs.sendMessage(tab.id, { action: 'CAPTURE_DEBUG_INFO' });
+
+        if (response && response.success) {
+          renderReport(response.data);
+        } else {
+          showError(response ? response.error : 'Failed to retrieve diagnostic data.');
         }
-      }
-
-      if (response && response.success) {
-        renderReport(response.data);
-      } else {
-        showError(response ? response.error : 'Failed to retrieve diagnostic data.');
+      } catch (injectErr) {
+        showError(`Cannot capture diagnostics from this tab: ${injectErr.message || injectErr}`);
       }
     } catch (e) {
       showError(`Error capturing debug info: ${e.message || e}`);

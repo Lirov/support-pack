@@ -25,22 +25,5 @@
   },
   "background": {
     "service_worker": "src/background/service-worker.js"
-  },
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*", "file://*/*"],
-      "js": ["src/content/main-world.js"],
-      "run_at": "document_start",
-      "world": "MAIN"
-    },
-    {
-      "matches": ["http://*/*", "https://*/*", "file://*/*"],
-      "js": [
-        "src/utils/redact.js",
-        "src/utils/browser-info.js",
-        "src/content/content.js"
-      ],
-      "run_at": "document_idle"
-    }
-  ]
+  }
 }
