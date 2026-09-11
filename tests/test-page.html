@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Pack - Diagnostics Test Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    h1 { color: #0284c7; }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    button {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    button:hover { background: #0369a1; }
+    button.btn-danger { background: #e11d48; }
+    button.btn-danger:hover { background: #be123c; }
+    .log-box {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      min-height: 60px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Support Pack Diagnostic Test Page</h1>
+  <p>Use the controls below to trigger various browser errors and failed network requests, then click the <strong>Support Pack</strong> extension icon to test report generation.</p>
+
+  <div class="card">
+    <h2>1. Console & JS Errors</h2>
+    <div class="grid">
+      <button class="btn-danger" id="trigger-uncaught">Trigger Uncaught Exception</button>
+      <button class="btn-danger" id="trigger-console-error">Trigger console.error()</button>
+      <button class="btn-danger" id="trigger-unhandled-rejection">Trigger Unhandled Rejection</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. Network Request Failures</h2>
+    <div class="grid">
+      <button class="btn-danger" id="trigger-fetch-404">Fetch HTTP 404</button>
+      <button class="btn-danger" id="trigger-fetch-500">Fetch HTTP 500</button>
+      <button class="btn-danger" id="trigger-xhr-404">XHR HTTP 404</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Sensitive Query Parameter Test</h2>
+    <p>Current page URL test string: <code id="url-display"></code></p>
+    <button id="add-token-param">Add ?token=secret_abc123 to URL</button>
+  </div>
+
+  <div class="card">
+    <h2>Event Log</h2>
+    <div id="log-box" class="log-box">Ready for testing...</div>
+  </div>
+
+  <script>
+    document.getElementById('url-display').textContent = window.location.href;
+
+    function log(msg) {
+      document.getElementById('log-box').textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+    }
+
+    document.getElementById('trigger-uncaught').addEventListener('click', () => {
+      log('Triggered uncaught error');
+      throw new Error('Test Uncaught Exception: Failed to load user profile component');
+    });
+
+    document.getElementById('trigger-console-error').addEventListener('click', () => {
+      log('Triggered console.error');
+      console.error('Test console.error: Could not connect to telemetry socket');
+    });
+
+    document.getElementById('trigger-unhandled-rejection').addEventListener('click', () => {
+      log('Triggered unhandled rejection');
+      Promise.reject(new Error('Test Promise Rejection: API request timed out after 5000ms'));
+    });
+
+    document.getElementById('trigger-fetch-404').addEventListener('click', () => {
+      log('Sent Fetch GET request to missing endpoint /api/missing-endpoint-404');
+      fetch('/api/missing-endpoint-404').catch(e => console.log(e));
+    });
+
+    document.getElementById('trigger-fetch-500').addEventListener('click', () => {
+      log('Sent Fetch POST request to endpoint https://httpstat.us/500');
+      fetch('https://httpstat.us/500').catch(e => console.log(e));
+    });
+
+    document.getElementById('trigger-xhr-404').addEventListener('click', () => {
+      log('Sent XHR GET request to missing endpoint /api/xhr-missing-404');
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/api/xhr-missing-404');
+      xhr.send();
+    });
+
+    document.getElementById('add-token-param').addEventListener('click', () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('token', 'secret_abc123_super_private');
+      url.searchParams.set('api_key', 'key_999888777');
+      url.searchParams.set('user', 'dev_tester');
+      window.history.pushState({}, '', url.href);
+      document.getElementById('url-display').textContent = window.location.href;
+      log('Updated URL with sensitive query params');
+    });
+  </script>
+</body>
+</html>
